@@ -21,7 +21,7 @@ import java.util.Optional;
 public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
-//    private final BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
     @Override
@@ -32,13 +32,13 @@ public class ReplyServiceImpl implements ReplyService {
         List<ReplyResponseDto> replyResponseDtos = new ArrayList<>();
         findReplies.forEach(reply -> {
             ReplyResponseDto resultDto = ReplyResponseDto.builder()
-                            .replyId(reply.getId())
-                            .boardId(reply.getBoard().getId())
-                            .content(reply.getContent())
-                            .memberId(reply.getMember().getId())
-                            .registerDate(reply.getRegisterDate())
-                            .modifyDate(reply.getModifyDate())
-                            .build();
+                    .replyId(reply.getId())
+                    .boardId(reply.getBoard().getId())
+                    .content(reply.getContent())
+                    .memberId(reply.getMember().getId())
+                    .registerDate(reply.getRegisterDate())
+                    .modifyDate(reply.getModifyDate())
+                    .build();
             replyResponseDtos.add(resultDto);
         });
         return replyResponseDtos;
@@ -48,57 +48,72 @@ public class ReplyServiceImpl implements ReplyService {
     @Transactional
     public void create(ReplyRequestDto replyRequestDto) {
         Optional<Member> findMember = memberRepository.findById(replyRequestDto.getMemberId());
-        if(findMember.isEmpty()){
+        if (findMember.isEmpty()) {
             throw new IllegalArgumentException();
         }
         Member member = findMember.get();
 
-        /*
+
         Optional<Board> findBoard = boardRepository.findById(replyRequestDto.getBoardId());
-        if(findBoard.isEmpty()){
+        if (findBoard.isEmpty()) {
             throw new IllegalArgumentException();
         }
         Board board = findBoard.get();
-         */
+
 
         Reply reply = Reply.builder()
-//                .board(board)
+                .board(board)
                 .content(replyRequestDto.getContent())
                 .member(member)
                 .build();
 
-        replyRepository.save(reply);
+        Reply save = replyRepository.save(reply);
     }
 
     @Override
+    @Transactional
     public void update(Long id, ReplyRequestDto replyRequestDto) {
         Optional<Reply> findReply = replyRepository.findById(id);
-        if(findReply.isEmpty()){
+        if (findReply.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
         Reply reply = findReply.get();
 
         Optional<Member> findMember = memberRepository.findById(replyRequestDto.getMemberId());
-        if(findMember.isEmpty()){
+        if (findMember.isEmpty()) {
             throw new IllegalArgumentException();
         }
         Member member = findMember.get();
 
         // 수정 요청한 멤버와 댓글을 작성한 멤버가 다르고 관리자가 아니라면 예외 처리
-        if(replyRequestDto.getMemberId() != reply.getMember().getId() && member.getMemberType() != MemberType.ADMIN){
+        if (isNotSameMember(replyRequestDto, reply) && isUser(member)) {
             throw new IllegalArgumentException();
         }
 
-        reply.setContent(replyRequestDto.getContent());
-        replyRepository.save(reply);
+        reply.updateReply(replyRequestDto.getContent());
 
+    }
+
+    public boolean isNotSameMember(ReplyRequestDto requestMember, Reply reply) {
+        if (requestMember.getMemberId() != reply.getMember().getId())
+            return true;
+        else
+            return false;
+
+    }
+
+    public boolean isUser(Member member) {
+        if (member.getMemberType() == MemberType.USER)
+            return true;
+        else
+            return false;
     }
 
     @Override
     public void delete(Long id) {
         Optional<Reply> findReply = replyRepository.findById(id);
-        if(findReply.isEmpty()){
+        if (findReply.isEmpty()) {
             throw new IllegalArgumentException();
         }
 

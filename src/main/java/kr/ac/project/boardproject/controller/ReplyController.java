@@ -16,7 +16,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping("/reply/{boardId}")
-    public List<ReplyResponseDto> readReply(@PathVariable Long boardId){
+    public List<ReplyResponseDto> readReply(@PathVariable Long boardId) {
         List<ReplyResponseDto> replyResponseDto = replyService.read(boardId);
         return replyResponseDto;
     }
