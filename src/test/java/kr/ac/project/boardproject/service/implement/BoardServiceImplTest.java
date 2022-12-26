@@ -36,7 +36,7 @@ class BoardServiceImplTest {
     private Board board;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         member = Member.builder()
                 .email("test@test.test")
                 .memberType(MemberType.USER)
@@ -83,6 +83,34 @@ class BoardServiceImplTest {
     }
 
     @Test
+    @DisplayName("게시글을 등록한다")
+    @Transactional
+    void postBoard() {
+        // given
+        String title = "postTitle";
+        String content = "postContent";
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder()
+                .memberId(member.getId())
+                .title(title)
+                .content(content)
+                .build();
+
+        // when
+        Long result = boardService.postBoard(boardRequestDto);
+        Optional<Board> findBoard = boardRepository.findById(result);
+        if (findBoard.isEmpty()) {
+            fail("보드를 찾지 못하였습니다.");
+        }
+        Board board = findBoard.get();
+
+        // then
+        assertThat(board.getId()).isEqualTo(result);
+        assertThat(board.getTitle()).isEqualTo(title);
+        assertThat(board.getContent()).isEqualTo(content);
+        assertThat(board.getMember()).isEqualTo(member);
+    }
+
+    @Test
     @DisplayName("게시글의 내용을 수정한다.")
     @Transactional
     void updateBoard() {
@@ -101,7 +129,7 @@ class BoardServiceImplTest {
         Long response = boardService.updateBoard(boardId, boardRequestDto);
 
         Optional<Board> findBoard = boardRepository.findById(boardId);
-        if(findBoard.isEmpty()){
+        if (findBoard.isEmpty()) {
             fail("보드를 찾지 못함");
         }
         Board getBoard = findBoard.get();
@@ -127,7 +155,7 @@ class BoardServiceImplTest {
         assertThat(findBoard).isEmpty();
     }
 
-    private void insertDummyDate(int count){
+    private void insertDummyDate(int count) {
         LongStream.rangeClosed(1, count).forEach(num -> {
             Member member = Member.builder()
                     .email("test@test.test" + num)
