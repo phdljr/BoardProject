@@ -4,7 +4,9 @@ import kr.ac.project.boardproject.dto.request.BoardRequestDto;
 import kr.ac.project.boardproject.dto.response.BoardListResponseDto;
 import kr.ac.project.boardproject.dto.response.BoardResponseDto;
 import kr.ac.project.boardproject.entity.Board;
+import kr.ac.project.boardproject.entity.Member;
 import kr.ac.project.boardproject.repository.BoardRepository;
+import kr.ac.project.boardproject.repository.MemberRepository;
 import kr.ac.project.boardproject.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
+
     private final int PAGE_SIZE = 10;
 
     @Override
@@ -48,6 +52,20 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public Long postBoard(BoardRequestDto boardRequestDto) {
+        Member member = findMember(boardRequestDto.getMemberId());
+
+        Board board = Board.builder()
+                .member(member)
+                .title(boardRequestDto.getTitle())
+                .content(boardRequestDto.getContent())
+                .build();
+
+        board = boardRepository.save(board);
+        return board.getId();
+    }
+
+    @Override
     @Transactional
     public Long updateBoard(Long boardId, BoardRequestDto boardRequestDto) {
         Board board = findBoard(boardId);
@@ -61,7 +79,7 @@ public class BoardServiceImpl implements BoardService {
         return boardId;
     }
 
-    private Board findBoard(Long boardId){
+    private Board findBoard(Long boardId) {
         Optional<Board> findBoard = boardRepository.findById(boardId);
         validate(findBoard);
 
@@ -69,9 +87,17 @@ public class BoardServiceImpl implements BoardService {
         return board;
     }
 
-    private void validate(Optional<Board> findBoard){
-        if(findBoard.isEmpty()){
-            throw new IllegalArgumentException("존재하지 않는 Board입니다.");
+    private Member findMember(Long memberId) {
+        Optional<Member> findMember = memberRepository.findById(memberId);
+        validate(findMember);
+
+        Member member = findMember.get();
+        return member;
+    }
+
+    private void validate(Optional<?> findEntity) {
+        if (findEntity.isEmpty()) {
+            throw new IllegalArgumentException("존재하지 않는 데이터입니다.");
         }
     }
 }

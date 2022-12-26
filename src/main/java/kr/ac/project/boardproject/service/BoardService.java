@@ -7,6 +7,7 @@ import kr.ac.project.boardproject.dto.response.BoardResponseDto;
 public interface BoardService {
     BoardListResponseDto getBoardList(int pageNumber);
     BoardResponseDto getBoard(Long boardId);
+    Long postBoard(BoardRequestDto boardRequestDto);
     Long updateBoard(Long boardId, BoardRequestDto boardRequestDto);
     Long deleteBoard(Long boardId);
 }
