@@ -8,6 +8,8 @@ import kr.ac.project.boardproject.service.RegisterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class RegisterServiceImpl implements RegisterService {
@@ -16,6 +18,7 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public void register(RegisterRequestDto registerRequestDto){
+        checkEmailDuplicate(registerRequestDto.getEmail());
         Member member = Member.builder()
                 .email(registerRequestDto.getEmail())
                 .password(registerRequestDto.getPassword())
@@ -23,5 +26,11 @@ public class RegisterServiceImpl implements RegisterService {
                 .memberType(MemberType.USER)
                 .build();
         memberRepository.save(member);
+    }
+
+    private void checkEmailDuplicate(String email){
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        if(optionalMember.isPresent())
+            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ReplyService {
     List<ReplyResponseDto> read(Long boardId);
-    void create(ReplyRequestDto replyRequestDto);
+    Long create(ReplyRequestDto replyRequestDto);
     void update(Long id, ReplyRequestDto replyRequestDto);
     void delete(Long id);
 }
