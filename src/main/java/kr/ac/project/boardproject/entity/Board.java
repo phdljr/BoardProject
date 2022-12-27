@@ -23,4 +23,9 @@ public class Board extends BaseEntity{
     private String content;
 
     private Long hit;
+
+    public void updateBoard(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 }

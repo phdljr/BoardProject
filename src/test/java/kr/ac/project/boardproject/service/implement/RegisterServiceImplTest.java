@@ -1,8 +1,9 @@
-package kr.ac.project.boardproject.service;
+package kr.ac.project.boardproject.service.implement;
 
 import kr.ac.project.boardproject.dto.request.RegisterRequestDto;
 import kr.ac.project.boardproject.entity.Member;
 import kr.ac.project.boardproject.repository.MemberRepository;
+import kr.ac.project.boardproject.service.RegisterService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,9 +21,9 @@ public class RegisterServiceImplTest {
     private MemberRepository memberRepository;
 
     @Test
-    void register(){
+    void register() {
         //given - 딱히 없어도 될듯. 아니면 이메일 중복 체크할 때 사용될수도?
-        
+
 
         //when - email이 test@email.com이고 pw가 test1234인 dto를 받아서 회원가입한다.
         String email = "test@email.com";
