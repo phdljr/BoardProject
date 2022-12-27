@@ -1,9 +1,7 @@
 package kr.ac.project.boardproject.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 
@@ -26,4 +24,9 @@ public class Reply extends BaseEntity {
     private Board board;
 
     private String content;
+
+    @Transactional
+    public void updateReply(String content) {
+        this.content = content;
+    }
 }
