@@ -2,9 +2,11 @@ package kr.ac.project.boardproject.service.implement;
 
 import kr.ac.project.boardproject.dto.request.ReplyRequestDto;
 import kr.ac.project.boardproject.dto.response.ReplyResponseDto;
+import kr.ac.project.boardproject.entity.Board;
 import kr.ac.project.boardproject.entity.Member;
 import kr.ac.project.boardproject.entity.MemberType;
 import kr.ac.project.boardproject.entity.Reply;
+import kr.ac.project.boardproject.repository.BoardRepository;
 import kr.ac.project.boardproject.repository.MemberRepository;
 import kr.ac.project.boardproject.repository.ReplyRepository;
 import kr.ac.project.boardproject.service.ReplyService;
