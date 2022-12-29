@@ -1,6 +1,7 @@
 package kr.ac.project.boardproject.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -22,7 +23,8 @@ public class Board extends BaseEntity{
 
     private String content;
 
-    private Long hit;
+    @Builder.Default
+    private Long hit = 0L;
 
     public void updateBoard(String title, String content){
         this.title = title;
