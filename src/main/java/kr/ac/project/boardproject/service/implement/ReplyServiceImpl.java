@@ -107,6 +107,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         Optional<Reply> findReply = replyRepository.findById(id);
         if (findReply.isEmpty()) {

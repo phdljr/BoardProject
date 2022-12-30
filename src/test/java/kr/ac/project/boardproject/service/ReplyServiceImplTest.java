@@ -1,16 +1,16 @@
 package kr.ac.project.boardproject.service;
 
-import kr.ac.project.boardproject.dto.request.RegisterRequestDto;
 import kr.ac.project.boardproject.dto.request.ReplyRequestDto;
 import kr.ac.project.boardproject.dto.response.ReplyResponseDto;
 import kr.ac.project.boardproject.entity.Board;
 import kr.ac.project.boardproject.entity.Member;
 import kr.ac.project.boardproject.entity.MemberType;
 import kr.ac.project.boardproject.entity.Reply;
+import kr.ac.project.boardproject.repository.BoardRepository;
+import kr.ac.project.boardproject.repository.MemberRepository;
 import kr.ac.project.boardproject.repository.ReplyRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,24 +25,29 @@ public class ReplyServiceImplTest {
     private ReplyService replyService;
     @Autowired
     private ReplyRepository replyRepository;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private BoardRepository boardRepository;
 
     private Board dummyBoard;
     private Member dummyMember;
 
     @BeforeEach
     public void setup() {
-        dummyBoard = Board.builder()
-                .member(dummyMember)
-                .content("test")
-                .build();
-
         dummyMember = Member.builder()
                 .email("test@test.com")
                 .password("test")
                 .nickname("test")
                 .memberType(MemberType.USER)
                 .build();
+        dummyMember = memberRepository.save(dummyMember);
 
+        dummyBoard = Board.builder()
+                .member(dummyMember)
+                .content("test")
+                .build();
+        dummyBoard = boardRepository.save(dummyBoard);
     }
 
     @Test
@@ -112,6 +117,9 @@ public class ReplyServiceImplTest {
 
         //then
         Optional<Reply> findReply = replyRepository.findById(testReply.getId());
+        if(findReply.isEmpty()){
+            throw new IllegalArgumentException();
+        }
         Reply reply = findReply.get();
         Assertions.assertThat(content).isEqualTo(reply.getContent());
 
@@ -121,8 +129,8 @@ public class ReplyServiceImplTest {
     @Transactional
     void delete() {
         //given
-        Long memberId = 1L;
-        Long boardId = 1L;
+        Long memberId = dummyMember.getId();
+        Long boardId = dummyBoard.getId();
         String content = "test";
 
         ReplyRequestDto replyRequestDto = ReplyRequestDto.builder()
@@ -130,12 +138,12 @@ public class ReplyServiceImplTest {
                 .boardId(boardId)
                 .content(content)
                 .build();
-        replyService.create(replyRequestDto);
+        Long replyId = replyService.create(replyRequestDto);
 
         //when
-        replyService.delete(1L);
+        replyService.delete(replyId);
 
         //then
-        Assertions.assertThat(replyRepository.findById(1L)).isEmpty();
+        Assertions.assertThat(replyRepository.findById(replyId)).isEmpty();
     }
 }
