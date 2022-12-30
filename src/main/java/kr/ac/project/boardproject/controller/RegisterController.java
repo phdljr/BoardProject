@@ -18,12 +18,14 @@ public class RegisterController {
         registerService.register(registerRequestDto);
         return "OK";
     }
+
     @PostMapping("/register/email-check")
-    public String checkEmailDuplicate(@RequestBody String email){
+    public String checkEmailDuplicate(@RequestBody String email) {
         return registerService.checkEmailDuplicate(email);
     }
+
     @PostMapping("/register/nickname-check")
-    public String checkNicknameDuplicate(@RequestBody String nickname){
+    public String checkNicknameDuplicate(@RequestBody String nickname) {
         return registerService.checkNicknameDuplicate(nickname);
     }
 }

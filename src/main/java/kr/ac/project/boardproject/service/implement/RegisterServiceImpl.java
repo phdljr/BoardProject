@@ -19,6 +19,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public void register(RegisterRequestDto registerRequestDto) {
         checkEmailDuplicate(registerRequestDto.getEmail());
+        checkNicknameDuplicate(registerRequestDto.getNickname());
         Member member = Member.builder()
                 .email(registerRequestDto.getEmail())
                 .password(registerRequestDto.getPassword())
@@ -32,7 +33,7 @@ public class RegisterServiceImpl implements RegisterService {
     public String checkEmailDuplicate(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         if (optionalMember.isPresent())
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("중복된 이메일입니다.");
         else
             return "OK";
     }
@@ -41,7 +42,7 @@ public class RegisterServiceImpl implements RegisterService {
     public String checkNicknameDuplicate(String nickname) {
         Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
         if (optionalMember.isPresent())
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("중복된 닉네임입니다.");
         else
             return "OK";
     }
