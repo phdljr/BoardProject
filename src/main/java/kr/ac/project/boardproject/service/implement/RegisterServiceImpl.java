@@ -28,9 +28,21 @@ public class RegisterServiceImpl implements RegisterService {
         memberRepository.save(member);
     }
 
-    private void checkEmailDuplicate(String email) {
+    @Override
+    public String checkEmailDuplicate(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         if (optionalMember.isPresent())
-            throw new IllegalArgumentException("이미 존재하는 회원입니다.");
+            throw new IllegalArgumentException();
+        else
+            return "OK";
+    }
+
+    @Override
+    public String checkNicknameDuplicate(String nickname) {
+        Optional<Member> optionalMember = memberRepository.findByNickname(nickname);
+        if (optionalMember.isPresent())
+            throw new IllegalArgumentException();
+        else
+            return "OK";
     }
 }
