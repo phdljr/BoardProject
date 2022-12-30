@@ -22,13 +22,13 @@ public class ReplyController {
     }
 
     @PostMapping("/reply")
-    public String createReply(ReplyRequestDto replyRequestDto) {
+    public String createReply(@RequestBody ReplyRequestDto replyRequestDto) {
         replyService.create(replyRequestDto);
         return "OK";
     }
 
     @PutMapping("/reply/{id}")
-    public String updateReply(@PathVariable Long id, ReplyRequestDto replyRequestDto) {
+    public String updateReply(@PathVariable Long id, @RequestBody ReplyRequestDto replyRequestDto) {
         replyService.update(id, replyRequestDto);
         return "OK";
     }
