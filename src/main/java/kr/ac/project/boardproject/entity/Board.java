@@ -1,7 +1,9 @@
 package kr.ac.project.boardproject.entity;
 
-import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -10,7 +12,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Board extends BaseEntity{
+public class Board extends BaseEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -26,7 +28,7 @@ public class Board extends BaseEntity{
     @Builder.Default
     private Long hit = 0L;
 
-    public void updateBoard(String title, String content){
+    public void updateBoard(String title, String content) {
         this.title = title;
         this.content = content;
     }

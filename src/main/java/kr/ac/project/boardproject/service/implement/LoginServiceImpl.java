@@ -22,7 +22,7 @@ public class LoginServiceImpl implements LoginService {
         String password = loginRequestDto.getPassword();
 
         Optional<Member> findMember = memberRepository.findByEmailAndPassword(email, password);
-        if(findMember.isEmpty()){
+        if (findMember.isEmpty()) {
             throw new IllegalArgumentException();
         }
 
