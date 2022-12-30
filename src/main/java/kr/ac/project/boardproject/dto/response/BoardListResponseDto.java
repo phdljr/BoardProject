@@ -43,7 +43,9 @@ public class BoardListResponseDto {
                 BoardResponseDto.builder()
                         .id(board.getId())
                         .title(board.getTitle())
+                        .nickname(board.getMember().getNickname())
                         .registerDate(board.getRegisterDate())
+                        .hit(board.getHit())
                         .build()
         ).collect(Collectors.toList());
     }

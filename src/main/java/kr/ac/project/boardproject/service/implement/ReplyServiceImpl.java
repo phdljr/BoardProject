@@ -98,18 +98,12 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     private boolean isNotSameMember(ReplyRequestDto requestMember, Reply reply) {
-        if (requestMember.getMemberId() != reply.getMember().getId())
-            return true;
-        else
-            return false;
+        return requestMember.getMemberId() != reply.getMember().getId();
 
     }
 
     private boolean isUser(Member member) {
-        if (member.getMemberType() == MemberType.USER)
-            return true;
-        else
-            return false;
+        return member.getMemberType() == MemberType.USER;
     }
 
     @Override

@@ -26,6 +26,7 @@ public class BoardServiceImpl implements BoardService {
     private final int PAGE_SIZE = 10;
 
     @Override
+    @Transactional
     public BoardListResponseDto getBoardList(int pageNumber) {
         PageRequest pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "registerDate"));
         Page<Board> boardListPage = boardRepository.findAll(pageable);

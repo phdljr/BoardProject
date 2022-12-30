@@ -2,7 +2,6 @@ package kr.ac.project.boardproject.controller;
 
 import kr.ac.project.boardproject.dto.request.ReplyRequestDto;
 import kr.ac.project.boardproject.dto.response.ReplyResponseDto;
-import kr.ac.project.boardproject.entity.Reply;
 import kr.ac.project.boardproject.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

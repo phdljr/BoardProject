@@ -17,7 +17,7 @@ public class RegisterServiceImpl implements RegisterService {
     private final MemberRepository memberRepository;
 
     @Override
-    public void register(RegisterRequestDto registerRequestDto){
+    public void register(RegisterRequestDto registerRequestDto) {
         checkEmailDuplicate(registerRequestDto.getEmail());
         Member member = Member.builder()
                 .email(registerRequestDto.getEmail())
@@ -28,9 +28,9 @@ public class RegisterServiceImpl implements RegisterService {
         memberRepository.save(member);
     }
 
-    private void checkEmailDuplicate(String email){
+    private void checkEmailDuplicate(String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        if(optionalMember.isPresent())
+        if (optionalMember.isPresent())
             throw new IllegalArgumentException("이미 존재하는 회원입니다.");
     }
 }
