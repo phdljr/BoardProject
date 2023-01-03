@@ -14,7 +14,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/board")
-    public BoardListResponseDto getBoardList(@RequestParam int page) {
+    public BoardListResponseDto getBoardList(@RequestParam(defaultValue = "1") int page) {
         BoardListResponseDto boardListResponseDto = boardService.getBoardList(page);
         return boardListResponseDto;
     }

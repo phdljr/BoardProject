@@ -5,6 +5,8 @@ import kr.ac.project.boardproject.dto.response.BoardLikeResponseDto;
 
 public interface BoardLikeService {
     BoardLikeResponseDto getBoardLike(Long boardId, Long memberId);
-    Long postBoardLike(BoardLikeRequestDto boardLikeRequestDto);
-    Long deleteBoardLike(Long boardId);
+
+    BoardLikeResponseDto postBoardLike(BoardLikeRequestDto boardLikeRequestDto);
+
+    BoardLikeResponseDto deleteBoardLike(Long boardId, Long memberId);
 }

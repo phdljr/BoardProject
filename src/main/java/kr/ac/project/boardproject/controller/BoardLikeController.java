@@ -13,20 +13,20 @@ public class BoardLikeController {
     private final BoardLikeService boardLikeService;
 
     @GetMapping("/board-like/{boardId}/{memberId}")
-    public BoardLikeResponseDto getBoardLike(@PathVariable Long boardId, @PathVariable Long memberId){
+    public BoardLikeResponseDto getBoardLike(@PathVariable Long boardId, @PathVariable Long memberId) {
         BoardLikeResponseDto boardLikeResponseDto = boardLikeService.getBoardLike(boardId, memberId);
         return boardLikeResponseDto;
     }
 
     @PostMapping("/board-like")
-    public Long postBoardLike(@RequestBody BoardLikeRequestDto boardLikeRequestDto){
-        Long result = boardLikeService.postBoardLike(boardLikeRequestDto);
+    public BoardLikeResponseDto postBoardLike(@RequestBody BoardLikeRequestDto boardLikeRequestDto) {
+        BoardLikeResponseDto result = boardLikeService.postBoardLike(boardLikeRequestDto);
         return result;
     }
 
-    @DeleteMapping("/board-like/{boardLikeId}")
-    public Long deleteBoardLike(@PathVariable Long boardLikeId){
-        Long result = boardLikeService.deleteBoardLike(boardLikeId);
+    @DeleteMapping("/board-like/{boardId}/{memberId}")
+    public BoardLikeResponseDto deleteBoardLike(@PathVariable Long boardId, @PathVariable Long memberId) {
+        BoardLikeResponseDto result = boardLikeService.deleteBoardLike(boardId, memberId);
         return result;
     }
 }

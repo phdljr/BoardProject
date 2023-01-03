@@ -24,6 +24,42 @@ public class BoardLikeServiceImpl implements BoardLikeService {
 
     @Override
     public BoardLikeResponseDto getBoardLike(Long boardId, Long memberId) {
+        BoardLikeResponseDto boardLikeResponseDto = createBoardLikeResponseDto(boardId, memberId);
+        return boardLikeResponseDto;
+    }
+
+    @Override
+    public BoardLikeResponseDto postBoardLike(BoardLikeRequestDto boardLikeRequestDto) {
+        Long boardId = boardLikeRequestDto.getBoardId();
+        Long memberId = boardLikeRequestDto.getMemberId();
+
+        boolean hasLiked = boardLikeRepository.existsByBoardIdAndMemberId(boardId, memberId);
+        validateLike(hasLiked);
+
+        Board board = findBoard(boardId);
+        Member member = findMember(memberId);
+        BoardLike boardLike = BoardLike.builder()
+                .member(member)
+                .board(board)
+                .build();
+        boardLikeRepository.save(boardLike);
+
+        BoardLikeResponseDto boardLikeResponseDto = createBoardLikeResponseDto(boardId, memberId);
+        return boardLikeResponseDto;
+    }
+
+    @Override
+    public BoardLikeResponseDto deleteBoardLike(Long boardId, Long memberId) {
+        Optional<BoardLike> findBoardLike = boardLikeRepository.findByBoardIdAndMemberId(boardId, memberId);
+        BoardLike boardLike = validate(findBoardLike);
+
+        boardLikeRepository.delete(boardLike);
+
+        BoardLikeResponseDto boardLikeResponseDto = createBoardLikeResponseDto(boardId, memberId);
+        return boardLikeResponseDto;
+    }
+
+    private BoardLikeResponseDto createBoardLikeResponseDto(Long boardId, Long memberId) {
         Long countLike = boardLikeRepository.countByBoardId(boardId);
         boolean hasLiked = boardLikeRepository.existsByBoardIdAndMemberId(boardId, memberId);
 
@@ -34,50 +70,28 @@ public class BoardLikeServiceImpl implements BoardLikeService {
         return boardLikeResponseDto;
     }
 
-    @Override
-    public Long postBoardLike(BoardLikeRequestDto boardLikeRequestDto) {
-        Long boardId = boardLikeRequestDto.getBoardId();
-        Long memberId = boardLikeRequestDto.getMemberId();
-
-        boolean hasLiked = boardLikeRepository.existsByBoardIdAndMemberId(boardId, memberId);
-        if(hasLiked){
-            throw new IllegalArgumentException("이미 좋아요를 누르셨습니다.");
-        }
-
-        Board board = findBoard(boardId);
-        Member member = findMember(memberId);
-        BoardLike boardLike = BoardLike.builder()
-                .member(member)
-                .board(board)
-                .build();
-        boardLike = boardLikeRepository.save(boardLike);
-        return boardLike.getId();
-    }
-
-    @Override
-    public Long deleteBoardLike(Long boardId) {
-        return null;
-    }
-
     private Board findBoard(Long boardId) {
         Optional<Board> findBoard = boardRepository.findById(boardId);
-        validate(findBoard);
-
-        Board board = findBoard.get();
+        Board board = validate(findBoard);
         return board;
     }
 
     private Member findMember(Long memberId) {
         Optional<Member> findMember = memberRepository.findById(memberId);
-        validate(findMember);
-
-        Member member = findMember.get();
+        Member member = validate(findMember);
         return member;
     }
 
-    private void validate(Optional<?> findEntity) {
+    private <T> T validate(Optional<T> findEntity) {
         if (findEntity.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않는 데이터입니다.");
+        }
+        return findEntity.get();
+    }
+
+    private void validateLike(boolean hasLiked) {
+        if (hasLiked) {
+            throw new IllegalArgumentException("이미 좋아요를 누르셨습니다.");
         }
     }
 }
