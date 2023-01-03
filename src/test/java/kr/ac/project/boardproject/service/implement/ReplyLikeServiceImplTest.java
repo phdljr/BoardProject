@@ -143,4 +143,20 @@ class ReplyLikeServiceImplTest {
         assertThat(replyLikeResponseDto.getLikeCount()).isEqualTo(10);
         assertThat(replyLikeResponseDto.isHasLiked()).isFalse();
     }
+
+    @Test
+    @DisplayName("로그인을 안한 상태에서 댓글 좋아요 조회가 잘 되는지 확인한다.")
+    void readWithNoLogin(){
+
+        List<ReplyLikeResponseDto> dtos = replyLikeService.read(board.getId(), -1L);
+
+        dtos.forEach(dto -> {
+            Long replyId = dto.getReplyId();
+            Long likeCount = dto.getLikeCount();
+            boolean hasLiked = dto.isHasLiked();
+            assertThat(replyId).isEqualTo(reply.getId());
+            assertThat(likeCount).isEqualTo(10);
+            assertThat(hasLiked).isFalse();
+        });
+    }
 }
