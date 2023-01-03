@@ -12,6 +12,7 @@ import kr.ac.project.boardproject.repository.MemberRepository;
 import kr.ac.project.boardproject.service.BoardLikeService;
 import kr.ac.project.boardproject.service.BoardService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,6 +40,7 @@ class BoardLikeServiceImplTest {
     private Board board;
     private BoardLike boardLike;
 
+    // 맴버, 게시글, 댓글, 게시글 좋아요가 하나씩 있는 상태
     @BeforeEach
     public void setUp() {
         member = Member.builder()
@@ -62,6 +64,7 @@ class BoardLikeServiceImplTest {
     }
 
     @Test
+    @DisplayName("게시판 좋아요를 조회한다.")
     @Transactional
     void getBoardLike() {
         // given
@@ -75,6 +78,7 @@ class BoardLikeServiceImplTest {
     }
 
     @Test
+    @DisplayName("게시판 좋아요를 생성한다.")
     @Transactional
     void postBoardLike() {
         // given
@@ -85,19 +89,24 @@ class BoardLikeServiceImplTest {
                 .build();
 
         // when
-        Long boardLikeId = boardLikeService.postBoardLike(boardLikeRequestDto);
-        Optional<BoardLike> findBoardLike = boardLikeRepository.findById(boardLikeId);
-        if(findBoardLike.isEmpty()){
-            fail("데이터를 찾지 못하였습니다.");
-        }
-        BoardLike boardLike = findBoardLike.get();
+        BoardLikeResponseDto boardLikeResponseDto = boardLikeService.postBoardLike(boardLikeRequestDto);
 
         // then
-        assertThat(boardLike.getBoard()).isEqualTo(board);
-        assertThat(boardLike.getMember()).isEqualTo(member);
+        assertThat(boardLikeResponseDto.getHasLiked()).isEqualTo(true);
+        assertThat(boardLikeResponseDto.getCountLike()).isEqualTo(1);
     }
 
     @Test
+    @DisplayName("게시판 좋아요를 삭제한다.")
+    @Transactional
     void deleteBoardLike() {
+        // given
+
+        // when
+        BoardLikeResponseDto boardLikeResponseDto = boardLikeService.deleteBoardLike(board.getId(), member.getId());
+
+        // then
+        assertThat(boardLikeResponseDto.getHasLiked()).isEqualTo(false);
+        assertThat(boardLikeResponseDto.getCountLike()).isEqualTo(0);
     }
 }
