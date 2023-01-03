@@ -40,7 +40,7 @@ class BoardLikeServiceImplTest {
     private Board board;
     private BoardLike boardLike;
 
-    // 맴버, 게시글, 댓글, 게시글 좋아요가 하나씩 있는 상태
+    // 맴버, 게시글, 게시글 좋아요가 하나씩 있는 상태
     @BeforeEach
     public void setUp() {
         member = Member.builder()
