@@ -14,7 +14,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/board")
-    public BoardListResponseDto getBoardList(@RequestParam int page) {
+    public BoardListResponseDto getBoardList(@RequestParam(defaultValue = "1") int page) {
         BoardListResponseDto boardListResponseDto = boardService.getBoardList(page);
         return boardListResponseDto;
     }
@@ -32,7 +32,7 @@ public class BoardController {
     }
 
     @PutMapping("/board/{boardId}")
-    public Long getBoard(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequestDto) {
+    public Long updateBoard(@PathVariable Long boardId, @RequestBody BoardRequestDto boardRequestDto) {
         Long result = boardService.updateBoard(boardId, boardRequestDto);
         return result;
     }
