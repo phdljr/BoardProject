@@ -1,11 +1,13 @@
 package kr.ac.project.boardproject.dto.request;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class ReplyLikeRequestDto {
     private Long memberId;

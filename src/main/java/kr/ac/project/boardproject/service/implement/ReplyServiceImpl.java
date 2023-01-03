@@ -117,5 +117,6 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = findReply.get();
 
         replyRepository.delete(reply);
+
     }
 }

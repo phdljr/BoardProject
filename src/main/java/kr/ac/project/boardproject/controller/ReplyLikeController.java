@@ -2,10 +2,12 @@ package kr.ac.project.boardproject.controller;
 
 
 import kr.ac.project.boardproject.dto.request.ReplyLikeRequestDto;
-import kr.ac.project.boardproject.dto.response.ReplyLikeResponseDto;
 import kr.ac.project.boardproject.service.ReplyLikeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -14,18 +16,12 @@ import java.util.List;
 public class ReplyLikeController {
     private final ReplyLikeService replyLikeService;
 
-    @GetMapping("/replylike/{boardId}/{memberId}")
-    public List<ReplyLikeResponseDto> readReplyLike(@PathVariable Long boardId, @PathVariable Long memberId) {
-        return replyLikeService.read(boardId, memberId);
-    }
-
     @PostMapping("/replylike")
-    public ReplyLikeResponseDto createReplyLike(@RequestBody ReplyLikeRequestDto replyLikeRequestDto) {
-        return replyLikeService.create(replyLikeRequestDto);
+    public List<?> createReplyLike(@RequestBody ReplyLikeRequestDto replyLikeRequestDto){
+        replyLikeService.create(replyLikeRequestDto);
     }
-
-    @DeleteMapping("/replylike/{replyId}/{memberId}")
-    public ReplyLikeResponseDto deleteReplyLike(@PathVariable Long replyId, @PathVariable Long memberId) {
-        return replyLikeService.delete(replyId, memberId);
+    @DeleteMapping("/replylike")
+    public List<?> deleteReplyLike(@RequestBody ReplyLikeRequestDto replyLikeRequestDto){
+        replyLikeService.delete(replyLikeRequestDto);
     }
 }
