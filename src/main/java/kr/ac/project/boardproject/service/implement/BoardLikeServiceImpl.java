@@ -22,6 +22,8 @@ public class BoardLikeServiceImpl implements BoardLikeService {
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
 
+    private final Long MEMBER_NONE_EXIST = -1L;
+
     @Override
     public BoardLikeResponseDto getBoardLike(Long boardId, Long memberId) {
         BoardLikeResponseDto boardLikeResponseDto = createBoardLikeResponseDto(boardId, memberId);
@@ -61,7 +63,10 @@ public class BoardLikeServiceImpl implements BoardLikeService {
 
     private BoardLikeResponseDto createBoardLikeResponseDto(Long boardId, Long memberId) {
         Long countLike = boardLikeRepository.countByBoardId(boardId);
-        boolean hasLiked = boardLikeRepository.existsByBoardIdAndMemberId(boardId, memberId);
+        boolean hasLiked = false;
+        if(memberId != MEMBER_NONE_EXIST){
+            hasLiked = boardLikeRepository.existsByBoardIdAndMemberId(boardId, memberId);
+        }
 
         BoardLikeResponseDto boardLikeResponseDto = BoardLikeResponseDto.builder()
                 .countLike(countLike)
