@@ -78,6 +78,20 @@ class BoardLikeServiceImplTest {
     }
 
     @Test
+    @DisplayName("로그인을 안한 상태에서 게시판 좋아요를 조회한다.")
+    @Transactional
+    void getBoardLikeNoLogin() {
+        // given
+
+        // when
+        BoardLikeResponseDto boardLikeResponseDto = boardLikeService.getBoardLike(board.getId(), -1L);
+
+        // then
+        assertThat(boardLikeResponseDto.getCountLike()).isEqualTo(1);
+        assertThat(boardLikeResponseDto.getHasLiked()).isEqualTo(false);
+    }
+
+    @Test
     @DisplayName("게시판 좋아요를 생성한다.")
     @Transactional
     void postBoardLike() {
