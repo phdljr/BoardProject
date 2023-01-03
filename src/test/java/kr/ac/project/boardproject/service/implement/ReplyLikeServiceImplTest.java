@@ -112,7 +112,7 @@ class ReplyLikeServiceImplTest {
         ReplyLikeResponseDto replyLikeResponseDto = replyLikeService.create(replyLikeRequestDto);
 
         //then
-        Optional<ReplyLike> findReplyLike = replyLikeRepository.findByReply_IdAndMember_Id(reply.getId(), member.getId());
+        Optional<ReplyLike> findReplyLike = replyLikeRepository.findByReplyIdAndMemberId(reply.getId(), member.getId());
         if (findReplyLike.isEmpty()) {
             fail("댓글 좋아요를 찾지 못함.");
         }
@@ -139,7 +139,7 @@ class ReplyLikeServiceImplTest {
         ReplyLikeResponseDto replyLikeResponseDto = replyLikeService.delete(reply.getId(), member.getId());
 
         //then
-        assertThat(replyLikeRepository.existsByReply_IdAndMember_Id(reply.getId(), member.getId())).isFalse();
+        assertThat(replyLikeRepository.existsByReplyIdAndMemberId(reply.getId(), member.getId())).isFalse();
         assertThat(replyLikeResponseDto.getLikeCount()).isEqualTo(10);
         assertThat(replyLikeResponseDto.isHasLiked()).isFalse();
     }

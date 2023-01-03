@@ -29,7 +29,7 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     @Transactional
     public List<ReplyResponseDto> read(Long boardId) {
-        List<Reply> findReplies = replyRepository.findByBoard_Id(boardId);
+        List<Reply> findReplies = replyRepository.findByBoardId(boardId);
         // dto로 변환
         List<ReplyResponseDto> replyResponseDtos = new ArrayList<>();
         findReplies.forEach(reply -> {
@@ -117,6 +117,5 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = findReply.get();
 
         replyRepository.delete(reply);
-
     }
 }

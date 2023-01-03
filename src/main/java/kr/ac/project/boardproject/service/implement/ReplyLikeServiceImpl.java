@@ -29,7 +29,7 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
         List<ReplyLikeResponseDto> replyLikeResponseDtos = new ArrayList<>();
         List<Long> replyIds = new ArrayList<>();
 
-        List<Reply> findReplies = replyRepository.findByBoard_Id(boardId);
+        List<Reply> findReplies = replyRepository.findByBoardId(boardId);
         findReplies.forEach(reply -> {
             replyIds.add(reply.getId());
         });
@@ -44,17 +44,15 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
 
     @Override
     public ReplyLikeResponseDto create(ReplyLikeRequestDto replyLikeRequestDto) {
-        isMember(replyLikeRequestDto.getMemberId());
+        validateMember(replyLikeRequestDto.getMemberId());
 
         Optional<Member> findMember = memberRepository.findById(replyLikeRequestDto.getMemberId());
-        if (findMember.isEmpty())
-            throw new IllegalArgumentException("댓글 좋아요를 할 사용자를 찾을 수 없습니다.");
+        validateOptional(findMember);
 
         Member member = findMember.get();
 
         Optional<Reply> findReply = replyRepository.findById(replyLikeRequestDto.getReplyId());
-        if (findReply.isEmpty())
-            throw new IllegalArgumentException("댓글 좋아요를 할 댓글을 찾을 수 없습니다.");
+        validateOptional(findReply);
 
         Reply reply = findReply.get();
 
@@ -71,9 +69,8 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
 
     @Override
     public ReplyLikeResponseDto delete(Long replyId, Long memberId) {
-        Optional<ReplyLike> findReplyLike = replyLikeRepository.findByReply_IdAndMember_Id(replyId, memberId);
-        if (findReplyLike.isEmpty())
-            throw new IllegalArgumentException("좋아요를 취소할 댓글이 없습니다.");
+        Optional<ReplyLike> findReplyLike = replyLikeRepository.findByReplyIdAndMemberId(replyId, memberId);
+        validateOptional(findReplyLike);
         ReplyLike replyLike = findReplyLike.get();
         replyLikeRepository.delete(replyLike);
 
@@ -81,8 +78,8 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
     }
 
     private ReplyLikeResponseDto createReplyLikeResponseDto(Long replyId, Long memberId) {
-        Long likeCount = replyLikeRepository.countByReply_Id(replyId);
-        boolean hasLiked = replyLikeRepository.existsByReply_IdAndMember_Id(replyId, memberId);
+        Long likeCount = replyLikeRepository.countByReplyId(replyId);
+        boolean hasLiked = replyLikeRepository.existsByReplyIdAndMemberId(replyId, memberId);
         ReplyLikeResponseDto replyLikeResponseDto = ReplyLikeResponseDto.builder()
                 .replyId(replyId)
                 .likeCount(likeCount)
@@ -92,9 +89,15 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
         return replyLikeResponseDto;
     }
 
-    private void isMember(Long memberId) {
+    private void validateMember(Long memberId) {
         if (memberId == null) {
             throw new IllegalArgumentException("로그인 정보가 없습니다.");
+        }
+    }
+
+    private void validateOptional(Optional<?> findEntity){
+        if(findEntity.isEmpty()){
+            throw new IllegalArgumentException("존재하지 않는 데이터입니다.");
         }
     }
 }

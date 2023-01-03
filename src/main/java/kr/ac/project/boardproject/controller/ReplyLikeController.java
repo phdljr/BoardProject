@@ -14,7 +14,7 @@ import java.util.List;
 public class ReplyLikeController {
     private final ReplyLikeService replyLikeService;
 
-    @PostMapping("/replylike/{boardId}/{memberId}")
+    @GetMapping("/replylike/{boardId}/{memberId}")
     public List<ReplyLikeResponseDto> readReplyLike(@PathVariable Long boardId, @PathVariable Long memberId) {
         return replyLikeService.read(boardId, memberId);
     }
