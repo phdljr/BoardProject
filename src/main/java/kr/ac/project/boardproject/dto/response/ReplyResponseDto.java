@@ -14,6 +14,7 @@ public class ReplyResponseDto {
     private Long memberId;
     private Long boardId;
     private String content;
+    private String nickname;
     private LocalDateTime registerDate;
     private LocalDateTime modifyDate;
 }

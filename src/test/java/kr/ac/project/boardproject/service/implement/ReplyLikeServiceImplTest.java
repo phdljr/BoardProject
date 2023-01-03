@@ -39,6 +39,7 @@ class ReplyLikeServiceImplTest {
     private Board board;
     private Reply reply;
 
+    //멤버 1명이 게시판, 댓글을 작성하고 나머지 10명이 댓글 좋아요를 누른 상태
     @BeforeEach
     public void setup() {
         member = Member.builder()
@@ -142,5 +143,22 @@ class ReplyLikeServiceImplTest {
         assertThat(replyLikeRepository.existsByReplyIdAndMemberId(reply.getId(), member.getId())).isFalse();
         assertThat(replyLikeResponseDto.getLikeCount()).isEqualTo(10);
         assertThat(replyLikeResponseDto.isHasLiked()).isFalse();
+    }
+
+    @Test
+    @DisplayName("로그인을 안한 상태에서 댓글 좋아요 조회가 잘 되는지 확인한다.")
+    @Transactional
+    void readWithNoLogin(){
+
+        List<ReplyLikeResponseDto> dtos = replyLikeService.read(board.getId(), -1L);
+
+        dtos.forEach(dto -> {
+            Long replyId = dto.getReplyId();
+            Long likeCount = dto.getLikeCount();
+            boolean hasLiked = dto.isHasLiked();
+            assertThat(replyId).isEqualTo(reply.getId());
+            assertThat(likeCount).isEqualTo(10);
+            assertThat(hasLiked).isFalse();
+        });
     }
 }

@@ -24,6 +24,8 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
     private final MemberRepository memberRepository;
     private final ReplyRepository replyRepository;
 
+    private final Long MEMBER_NONE_EXIST = -1L;
+
     @Override
     public List<ReplyLikeResponseDto> read(Long boardId, Long memberId) {
         List<ReplyLikeResponseDto> replyLikeResponseDtos = new ArrayList<>();
@@ -79,7 +81,10 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
 
     private ReplyLikeResponseDto createReplyLikeResponseDto(Long replyId, Long memberId) {
         Long likeCount = replyLikeRepository.countByReplyId(replyId);
-        boolean hasLiked = replyLikeRepository.existsByReplyIdAndMemberId(replyId, memberId);
+        boolean hasLiked = false;
+        if(memberId != MEMBER_NONE_EXIST){
+            hasLiked = replyLikeRepository.existsByReplyIdAndMemberId(replyId, memberId);
+        }
         ReplyLikeResponseDto replyLikeResponseDto = ReplyLikeResponseDto.builder()
                 .replyId(replyId)
                 .likeCount(likeCount)
