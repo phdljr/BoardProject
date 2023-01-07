@@ -1,4 +1,4 @@
-package kr.ac.project.boardproject.service.implement;
+package kr.ac.project.boardproject.service;
 
 import kr.ac.project.boardproject.dto.request.ReplyRequestDto;
 import kr.ac.project.boardproject.dto.response.ReplyResponseDto;
@@ -9,8 +9,6 @@ import kr.ac.project.boardproject.entity.Reply;
 import kr.ac.project.boardproject.repository.BoardRepository;
 import kr.ac.project.boardproject.repository.MemberRepository;
 import kr.ac.project.boardproject.repository.ReplyRepository;
-import kr.ac.project.boardproject.service.ReplyService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class ReplyServiceImplTest {
@@ -72,9 +72,13 @@ public class ReplyServiceImplTest {
 
         //when
         List<ReplyResponseDto> replyList = replyService.read(dummyBoard.getId());
+        ReplyResponseDto replyResponseDto = replyList.get(0);
 
         //then
-        Assertions.assertThat(replyList.size()).isEqualTo(2);
+        assertThat(replyList.size()).isEqualTo(2);
+        assertThat(replyResponseDto.getReplyId()).isEqualTo(testReply1.getId());
+        assertThat(replyResponseDto.getContent()).isEqualTo(testReply1.getContent());
+        assertThat(replyResponseDto.getNickname()).isEqualTo(testReply1.getMember().getNickname());
     }
 
     @Test
@@ -91,7 +95,7 @@ public class ReplyServiceImplTest {
         Long replyId = replyService.create(replyRequestDto);
 
         //then
-        Assertions.assertThat(replyRepository.findById(replyId)).isNotEmpty();
+        assertThat(replyRepository.findById(replyId)).isNotEmpty();
     }
 
     @Test
@@ -122,7 +126,7 @@ public class ReplyServiceImplTest {
             throw new IllegalArgumentException();
         }
         Reply reply = findReply.get();
-        Assertions.assertThat(content).isEqualTo(reply.getContent());
+        assertThat(content).isEqualTo(reply.getContent());
 
     }
 
@@ -145,6 +149,6 @@ public class ReplyServiceImplTest {
         replyService.delete(replyId);
 
         //then
-        Assertions.assertThat(replyRepository.findById(replyId)).isEmpty();
+        assertThat(replyRepository.findById(replyId)).isEmpty();
     }
 }

@@ -38,6 +38,7 @@ public class ReplyServiceImpl implements ReplyService {
                     .boardId(reply.getBoard().getId())
                     .content(reply.getContent())
                     .memberId(reply.getMember().getId())
+                    .nickname(reply.getMember().getNickname())
                     .registerDate(reply.getRegisterDate())
                     .modifyDate(reply.getModifyDate())
                     .build();
@@ -47,7 +48,6 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    @Transactional
     public Long create(ReplyRequestDto replyRequestDto) {
         Optional<Member> findMember = memberRepository.findById(replyRequestDto.getMemberId());
         if (findMember.isEmpty()) {
@@ -73,7 +73,6 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    @Transactional
     public void update(Long id, ReplyRequestDto replyRequestDto) {
         Optional<Reply> findReply = replyRepository.findById(id);
         if (findReply.isEmpty()) {
@@ -107,7 +106,6 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    @Transactional
     public void delete(Long id) {
         Optional<Reply> findReply = replyRepository.findById(id);
         if (findReply.isEmpty()) {
@@ -117,6 +115,5 @@ public class ReplyServiceImpl implements ReplyService {
         Reply reply = findReply.get();
 
         replyRepository.delete(reply);
-
     }
 }
