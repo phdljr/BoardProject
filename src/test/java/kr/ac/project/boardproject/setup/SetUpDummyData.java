@@ -1,9 +1,7 @@
 package kr.ac.project.boardproject.setup;
 
-import kr.ac.project.boardproject.entity.Board;
-import kr.ac.project.boardproject.entity.Member;
-import kr.ac.project.boardproject.entity.MemberType;
-import kr.ac.project.boardproject.entity.Reply;
+import kr.ac.project.boardproject.entity.*;
+import kr.ac.project.boardproject.repository.BoardLikeRepository;
 import kr.ac.project.boardproject.repository.BoardRepository;
 import kr.ac.project.boardproject.repository.MemberRepository;
 import kr.ac.project.boardproject.repository.ReplyRepository;
@@ -26,6 +24,8 @@ public class SetUpDummyData {
     protected Member member;
     protected Board board;
     protected Reply reply;
+    @Autowired
+    private BoardLikeRepository boardLikeRepository;
 
     @Test
     public void createDummyData() {
@@ -68,13 +68,19 @@ public class SetUpDummyData {
                     .build();
             board = boardRepository.save(board);
 
+            BoardLike boardLike = BoardLike.builder()
+                    .member(member)
+                    .board(board)
+                    .build();
+            boardLikeRepository.save(boardLike);
+
             Board finalBoard = board;
             Member finalMember = member;
             LongStream.range(1, 6).forEach(j -> {
                 Reply reply = Reply.builder()
                         .board(finalBoard)
                         .member(finalMember)
-                        .content("test")
+                        .content("test" + j)
                         .build();
                 replyRepository.save(reply);
             });

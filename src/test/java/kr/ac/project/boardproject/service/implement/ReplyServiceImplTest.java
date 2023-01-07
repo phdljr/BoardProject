@@ -1,4 +1,4 @@
-package kr.ac.project.boardproject.service;
+package kr.ac.project.boardproject.service.implement;
 
 import kr.ac.project.boardproject.dto.request.ReplyRequestDto;
 import kr.ac.project.boardproject.dto.response.ReplyResponseDto;
@@ -9,6 +9,7 @@ import kr.ac.project.boardproject.entity.Reply;
 import kr.ac.project.boardproject.repository.BoardRepository;
 import kr.ac.project.boardproject.repository.MemberRepository;
 import kr.ac.project.boardproject.repository.ReplyRepository;
+import kr.ac.project.boardproject.service.ReplyService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
