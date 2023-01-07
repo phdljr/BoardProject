@@ -20,12 +20,12 @@ public class SetUpDummyData {
     protected BoardRepository boardRepository;
     @Autowired
     protected ReplyRepository replyRepository;
+    @Autowired
+    private BoardLikeRepository boardLikeRepository;
 
     protected Member member;
     protected Board board;
     protected Reply reply;
-    @Autowired
-    private BoardLikeRepository boardLikeRepository;
 
     @Test
     public void createDummyData() {

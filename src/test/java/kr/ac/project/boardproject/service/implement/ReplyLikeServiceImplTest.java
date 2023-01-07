@@ -91,7 +91,7 @@ class ReplyLikeServiceImplTest {
         //then
         dtos.forEach(dto -> {
             Long replyId = dto.getReplyId();
-            Long likeCount = dto.getLikeCount();
+            Long likeCount = dto.getCountLike();
             boolean hasLiked = dto.isHasLiked();
             assertThat(replyId).isEqualTo(reply.getId());
             assertThat(likeCount).isEqualTo(10);
@@ -121,7 +121,7 @@ class ReplyLikeServiceImplTest {
 
         assertThat(replyLike.getMember()).isEqualTo(reply.getMember());
         assertThat(replyLike.getReply().getId()).isEqualTo(replyLikeResponseDto.getReplyId());
-        assertThat(replyLikeResponseDto.getLikeCount()).isEqualTo(11);
+        assertThat(replyLikeResponseDto.getCountLike()).isEqualTo(11);
         assertThat(replyLikeResponseDto.isHasLiked()).isTrue();
     }
 
@@ -141,7 +141,7 @@ class ReplyLikeServiceImplTest {
 
         //then
         assertThat(replyLikeRepository.existsByReplyIdAndMemberId(reply.getId(), member.getId())).isFalse();
-        assertThat(replyLikeResponseDto.getLikeCount()).isEqualTo(10);
+        assertThat(replyLikeResponseDto.getCountLike()).isEqualTo(10);
         assertThat(replyLikeResponseDto.isHasLiked()).isFalse();
     }
 
@@ -154,7 +154,7 @@ class ReplyLikeServiceImplTest {
 
         dtos.forEach(dto -> {
             Long replyId = dto.getReplyId();
-            Long likeCount = dto.getLikeCount();
+            Long likeCount = dto.getCountLike();
             boolean hasLiked = dto.isHasLiked();
             assertThat(replyId).isEqualTo(reply.getId());
             assertThat(likeCount).isEqualTo(10);

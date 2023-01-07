@@ -14,17 +14,17 @@ import java.util.List;
 public class ReplyLikeController {
     private final ReplyLikeService replyLikeService;
 
-    @GetMapping("/replylike/{boardId}/{memberId}")
+    @GetMapping("/reply-like/{boardId}/{memberId}")
     public List<ReplyLikeResponseDto> readReplyLike(@PathVariable Long boardId, @PathVariable Long memberId) {
         return replyLikeService.read(boardId, memberId);
     }
 
-    @PostMapping("/replylike")
+    @PostMapping("/reply-like")
     public ReplyLikeResponseDto createReplyLike(@RequestBody ReplyLikeRequestDto replyLikeRequestDto) {
         return replyLikeService.create(replyLikeRequestDto);
     }
 
-    @DeleteMapping("/replylike/{replyId}/{memberId}")
+    @DeleteMapping("/reply-like/{replyId}/{memberId}")
     public ReplyLikeResponseDto deleteReplyLike(@PathVariable Long replyId, @PathVariable Long memberId) {
         return replyLikeService.delete(replyId, memberId);
     }

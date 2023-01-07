@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class ReplyLikeResponseDto {
     private Long replyId;
-    private Long likeCount;
+    private Long countLike;
     private boolean hasLiked;
 }

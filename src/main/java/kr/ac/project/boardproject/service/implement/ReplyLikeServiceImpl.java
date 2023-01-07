@@ -87,7 +87,7 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
         }
         ReplyLikeResponseDto replyLikeResponseDto = ReplyLikeResponseDto.builder()
                 .replyId(replyId)
-                .likeCount(likeCount)
+                .countLike(likeCount)
                 .hasLiked(hasLiked)
                 .build();
 
