@@ -40,10 +40,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public BoardResponseDto getBoard(Long boardId) {
-        view(boardId);
-        Board board = findBoard(boardId);
+        updateHit(boardId);
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        Board board = findBoard.get();
 
-        int replyCount = replyRepository.findByBoardId(boardId).size();
+        Long replyCount = replyRepository.countByBoardId(boardId);
 
         BoardResponseDto responseDto = BoardResponseDto.builder()
                 .id(board.getId())
@@ -108,7 +109,7 @@ public class BoardServiceImpl implements BoardService {
         }
     }
 
-    private void view(Long boardId) {
+    private void updateHit(Long boardId) {
         if(!boardRepository.existsById(boardId)){
             throw new IllegalArgumentException();
         }

@@ -15,6 +15,6 @@ public class BoardResponseDto {
     private String title;
     private String content;
     private Long hit;
-    private int replyCount;
+    private Long replyCount;
     private LocalDateTime registerDate;
 }
