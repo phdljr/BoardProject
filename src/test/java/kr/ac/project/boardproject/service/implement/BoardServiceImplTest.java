@@ -57,7 +57,7 @@ class BoardServiceImplTest {
     }
 
     @Test
-    @DisplayName("글을 10번 읽고 조회수가 10번 증가되는지 확인한다.")
+    @DisplayName("글을 1번 읽고 조회수가 1번 증가되는지 확인한다.")
     @Transactional
     void updateHit(){
         // given
