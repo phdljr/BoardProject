@@ -6,8 +6,10 @@ import kr.ac.project.boardproject.dto.response.BoardResponseDto;
 import kr.ac.project.boardproject.entity.Board;
 import kr.ac.project.boardproject.entity.Member;
 import kr.ac.project.boardproject.entity.MemberType;
+import kr.ac.project.boardproject.entity.Reply;
 import kr.ac.project.boardproject.repository.BoardRepository;
 import kr.ac.project.boardproject.repository.MemberRepository;
+import kr.ac.project.boardproject.repository.ReplyRepository;
 import kr.ac.project.boardproject.service.BoardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,6 +33,8 @@ class BoardServiceImplTest {
     private BoardRepository boardRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private ReplyRepository replyRepository;
 
     private Member member;
     private Board board;
@@ -50,6 +54,17 @@ class BoardServiceImplTest {
                 .content("testContent")
                 .build();
         board = boardRepository.save(board);
+    }
+
+    @Test
+    @DisplayName("글을 1번 읽고 조회수가 1번 증가되는지 확인한다.")
+    @Transactional
+    void updateHit(){
+        // given
+        Long boardId = board.getId();
+        BoardResponseDto boardResponseDto = boardService.getBoard(boardId);
+
+        assertThat(boardResponseDto.getHit()).isEqualTo(1L);
     }
 
     @Test
@@ -80,6 +95,21 @@ class BoardServiceImplTest {
         // then
         assertThat(boardResponseDto.getId()).isEqualTo(boardId);
         assertThat(boardResponseDto.getNickname()).isEqualTo(member.getNickname());
+    }
+
+    @Test
+    @DisplayName("게시글을 읽어올 때 댓글갯수를 가져오는지 확인한다.")
+    @Transactional
+    void getBoardWithReplyCount() {
+        //given
+        insertDummyReply(15);
+        Long boardId = board.getId();
+
+        //when
+        BoardResponseDto boardResponseDto = boardService.getBoard(boardId);
+
+        //then
+        assertThat(boardResponseDto.getReplyCount()).isEqualTo(15);
     }
 
     @Test
@@ -170,6 +200,17 @@ class BoardServiceImplTest {
                     .content("testContent" + num)
                     .build();
             board = boardRepository.save(board);
+        });
+    }
+
+    private void insertDummyReply(int count) {
+        LongStream.rangeClosed(1, count).forEach(num -> {
+            Reply reply = Reply.builder()
+                    .board(board)
+                    .content("test" + num)
+                    .member(member)
+                    .build();
+            replyRepository.save(reply);
         });
     }
 }

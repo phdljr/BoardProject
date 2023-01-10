@@ -7,6 +7,7 @@ import kr.ac.project.boardproject.entity.Board;
 import kr.ac.project.boardproject.entity.Member;
 import kr.ac.project.boardproject.repository.BoardRepository;
 import kr.ac.project.boardproject.repository.MemberRepository;
+import kr.ac.project.boardproject.repository.ReplyRepository;
 import kr.ac.project.boardproject.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final ReplyRepository replyRepository;
 
     private final int PAGE_SIZE = 10;
 
@@ -38,7 +40,11 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public BoardResponseDto getBoard(Long boardId) {
-        Board board = findBoard(boardId);
+        updateHit(boardId);
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        Board board = findBoard.get();
+
+        Long replyCount = replyRepository.countByBoardId(boardId);
 
         BoardResponseDto responseDto = BoardResponseDto.builder()
                 .id(board.getId())
@@ -47,6 +53,7 @@ public class BoardServiceImpl implements BoardService {
                 .content(board.getContent())
                 .registerDate(board.getRegisterDate())
                 .hit(board.getHit())
+                .replyCount(replyCount)
                 .build();
 
         return responseDto;
@@ -100,5 +107,12 @@ public class BoardServiceImpl implements BoardService {
         if (findEntity.isEmpty()) {
             throw new IllegalArgumentException("존재하지 않는 데이터입니다.");
         }
+    }
+
+    private void updateHit(Long boardId) {
+        if(!boardRepository.existsById(boardId)){
+            throw new IllegalArgumentException();
+        }
+        boardRepository.updatehit(boardId);
     }
 }
