@@ -1,9 +1,10 @@
-package kr.ac.project.boardproject.service;
+package kr.ac.project.boardproject.service.implement;
 
 import kr.ac.project.boardproject.dto.request.LoginRequestDto;
 import kr.ac.project.boardproject.dto.response.LoginResponseDto;
 import kr.ac.project.boardproject.entity.Member;
 import kr.ac.project.boardproject.repository.MemberRepository;
+import kr.ac.project.boardproject.service.LoginService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class LoginServiceImplTest {
