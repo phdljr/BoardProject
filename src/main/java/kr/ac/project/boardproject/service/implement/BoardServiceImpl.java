@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -33,9 +35,33 @@ public class BoardServiceImpl implements BoardService {
         PageRequest pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "registerDate"));
         Page<Board> boardListPage = boardRepository.findAll(pageable);
 
-        BoardListResponseDto responseDto = new BoardListResponseDto(boardListPage);
-        return responseDto;
+        int pageSize = boardListPage.getSize();
+        int totalPageNumber = boardListPage.getTotalPages();
+        int currentPageNumber = boardListPage.getNumber() + 1;
+        int tempEnd = (int) Math.ceil(currentPageNumber / (float) pageSize) * pageSize; // 23페이지라면 20페이지로 맞춰주기
+        int start = tempEnd - (pageSize - 1);
+        int end = Math.min(totalPageNumber, tempEnd);
+
+        return BoardListResponseDto.builder()
+                .boardList(boardListPage
+                        .stream()
+                        .map(board -> BoardResponseDto.builder()
+                                .id(board.getId())
+                                .content(board.getContent())
+                                .hit(board.getHit())
+                                .nickname(board.getMember().getNickname())
+                                .registerDate(board.getRegisterDate())
+                                .title(board.getTitle())
+                                .build())
+                        .toList())
+                .totalPageNumber(boardListPage.getTotalPages())
+                .currentPageNumber(boardListPage.getNumber() + 1)
+                .previousPage(start > 1)
+                .nextPage(totalPageNumber > tempEnd)
+                .pageList(IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList()))
+                .build();
     }
+
 
     @Override
     @Transactional
@@ -110,7 +136,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     private void updateHit(Long boardId) {
-        if(!boardRepository.existsById(boardId)){
+        if (!boardRepository.existsById(boardId)) {
             throw new IllegalArgumentException();
         }
         boardRepository.updatehit(boardId);
