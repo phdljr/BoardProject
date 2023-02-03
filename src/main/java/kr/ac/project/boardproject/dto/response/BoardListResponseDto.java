@@ -2,6 +2,7 @@ package kr.ac.project.boardproject.dto.response;
 
 import kr.ac.project.boardproject.entity.Board;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
+@Setter
 public class BoardListResponseDto {
     private int totalPageNumber;
     private int currentPageNumber;
