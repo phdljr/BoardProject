@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static kr.ac.project.boardproject.dto.response.BoardResponseDto.makeBoardListDto;
+
 @Getter
 public class BoardListResponseDto {
     private int totalPageNumber;
@@ -34,17 +36,5 @@ public class BoardListResponseDto {
         previousPage = start > 1;
         nextPage = totalPageNumber > tempEnd;
         pageList = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
-    }
-
-    private List<BoardResponseDto> makeBoardListDto(Page<Board> page) {
-        return boardList = page.getContent().stream().map(board ->
-                BoardResponseDto.builder()
-                        .id(board.getId())
-                        .title(board.getTitle())
-                        .nickname(board.getMember().getNickname())
-                        .registerDate(board.getRegisterDate())
-                        .hit(board.getHit())
-                        .build()
-        ).collect(Collectors.toList());
     }
 }
