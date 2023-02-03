@@ -33,7 +33,8 @@ public class BoardServiceImpl implements BoardService {
         PageRequest pageable = PageRequest.of(pageNumber - 1, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "registerDate"));
         Page<Board> boardListPage = boardRepository.findAll(pageable);
 
-        BoardListResponseDto responseDto = new BoardListResponseDto(boardListPage);
+        BoardListResponseDto responseDto =
+                new BoardListResponseDto(boardListPage.getTotalPages(), boardListPage.getNumber(), boardListPage.getSize(), boardListPage.getContent());
         return responseDto;
     }
 
@@ -46,15 +47,7 @@ public class BoardServiceImpl implements BoardService {
 
         Long replyCount = replyRepository.countByBoardId(boardId);
 
-        BoardResponseDto responseDto = BoardResponseDto.builder()
-                .id(board.getId())
-                .nickname(board.getMember().getNickname())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .registerDate(board.getRegisterDate())
-                .hit(board.getHit())
-                .replyCount(replyCount)
-                .build();
+        BoardResponseDto responseDto = new BoardResponseDto(board, replyCount);
 
         return responseDto;
     }
