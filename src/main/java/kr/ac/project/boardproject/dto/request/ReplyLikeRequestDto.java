@@ -3,6 +3,7 @@ package kr.ac.project.boardproject.dto.request;
 import lombok.*;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
