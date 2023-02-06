@@ -14,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Board extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

@@ -14,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class ReplyLike {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
