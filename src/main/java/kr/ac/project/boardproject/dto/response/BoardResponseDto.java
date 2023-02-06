@@ -1,6 +1,7 @@
 package kr.ac.project.boardproject.dto.response;
 
 import kr.ac.project.boardproject.entity.Board;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class BoardResponseDto {
     private Long id;
     private String nickname;

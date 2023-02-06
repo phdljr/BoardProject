@@ -21,7 +21,7 @@ public class BoardListResponseDto {
         this.currentPageNumber = currentPageNumber + 1;
         this.boardList =  makeBoardListDto(boardList);
 
-        int tempEnd = (int)Math.ceil(currentPageNumber / (float)pageSize) * pageSize; // 23페이지라면 20페이지로 맞춰주기
+        int tempEnd = (int)Math.ceil(this.currentPageNumber / (float)pageSize) * pageSize; // 23페이지라면 20페이지로 맞춰주기
         int start = tempEnd - (pageSize - 1);
         int end = Math.min(totalPageNumber, tempEnd);
         previousPage = start > 1;
