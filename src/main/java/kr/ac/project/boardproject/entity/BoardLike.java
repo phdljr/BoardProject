@@ -14,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class BoardLike {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
